@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer Glow -->
+    <path
+        android:pathData="M54,54m-35,0a35,35 0,1 1,70 0a35,35 0,1 1,-70 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="54"
+                android:centerY="54"
+                android:gradientRadius="35"
+                android:type="radial">
+                <item android:color="#806C3BFF" android:offset="0.7" />
+                <item android:color="#006C3BFF" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Q Shape with Lightning -->
+    <path
+        android:pathData="M70,54A16,16 0,1 1,54 38A16,16 0,0 1,70 54ZM54,30A24,24 0,1 0,78 54A24,24 0,0 0,54 30Z"
+        android:strokeWidth="1">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:angle="135"
+                android:endColor="@color/secondary"
+                android:startColor="@color/primary"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+
+    <!-- Lightning Bolt merged -->
+    <path
+        android:fillColor="@color/accent"
+        android:pathData="M52,48 L62,48 L50,65 L56,65 L44,85 L48,65 L42,65 Z" />
+
+    <!-- Trophy Icon inside -->
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M51,52 L57,52 L57,53 C57,54.7 55.7,56 54,56 C52.3,56 51,54.7 51,53 Z M49,50 L59,50 L59,53 C59,55.8 56.8,58 54,58 C51.2,58 49,55.8 49,53 Z" />
+
+</vector>

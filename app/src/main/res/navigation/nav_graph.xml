@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.akash.gkgsmaster.ui.home.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.akash.gkgsmaster.ui.quiz.QuizFragment"
+        android:label="@string/quiz"
+        tools:layout="@layout/fragment_quiz">
+        <argument
+            android:name="category"
+            app:argType="string" />
+        <argument
+            android:name="difficulty"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_quizFragment_to_quizResultFragment"
+            app:destination="@id/quizResultFragment"
+            app:popUpTo="@id/quizFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizSetupFragment"
+        android:name="com.akash.gkgsmaster.ui.quiz.QuizSetupFragment"
+        android:label="Quiz Setup"
+        tools:layout="@layout/fragment_quiz_setup">
+        <action
+            android:id="@+id/action_quizSetupFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizResultFragment"
+        android:name="com.akash.gkgsmaster.ui.quiz.QuizResultFragment"
+        android:label="Result"
+        tools:layout="@layout/fragment_quiz_result">
+        <argument
+            android:name="result"
+            app:argType="com.akash.gkgsmaster.data.model.QuizResult" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="com.akash.gkgsmaster.ui.learn.LearnFragment"
+        android:label="@string/learn"
+        tools:layout="@layout/fragment_learn">
+        <action
+            android:id="@+id/action_learnFragment_to_GKArticleListFragment"
+            app:destination="@id/GKArticleListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GKArticleListFragment"
+        android:name="com.akash.gkgsmaster.ui.learn.GKArticleListFragment"
+        android:label="GK Articles"
+        tools:layout="@layout/fragment_gk_article_list">
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_GKArticleListFragment_to_GKArticleDetailFragment"
+            app:destination="@id/GKArticleDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GKArticleDetailFragment"
+        android:name="com.akash.gkgsmaster.ui.learn.GKArticleDetailFragment"
+        android:label="Article Detail"
+        tools:layout="@layout/fragment_gk_article_detail">
+        <argument
+            android:name="article"
+            app:argType="com.akash.gkgsmaster.data.model.GKArticle" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.akash.gkgsmaster.ui.notes.NotesFragment"
+        android:label="@string/notes"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.akash.gkgsmaster.ui.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.akash.gkgsmaster.ui.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <fragment
+        android:id="@+id/scienceFragment"
+        android:name="com.akash.gkgsmaster.ui.science.ScienceFragment"
+        android:label="General Science"
+        tools:layout="@layout/fragment_science">
+        <action
+            android:id="@+id/action_scienceFragment_to_scienceTopicListFragment"
+            app:destination="@id/scienceTopicListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scienceTopicListFragment"
+        android:name="com.akash.gkgsmaster.ui.science.ScienceTopicListFragment"
+        android:label="Science Topics"
+        tools:layout="@layout/fragment_science_topic_list">
+        <argument
+            android:name="categoryId"
+            app:argType="string" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_scienceTopicListFragment_to_scienceTopicDetailFragment"
+            app:destination="@id/scienceTopicDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scienceTopicDetailFragment"
+        android:name="com.akash.gkgsmaster.ui.science.ScienceDetailFragment"
+        android:label="Topic Detail"
+        tools:layout="@layout/fragment_science_detail">
+        <argument
+            android:name="topic"
+            app:argType="com.akash.gkgsmaster.data.model.ScienceTopic" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookletListFragment"
+        android:name="com.akash.gkgsmaster.ui.booklet.BookletListFragment"
+        android:label="Booklets"
+        tools:layout="@layout/fragment_booklet_list">
+        <action
+            android:id="@+id/action_bookletListFragment_to_bookletReaderFragment"
+            app:destination="@id/bookletReaderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookletReaderFragment"
+        android:name="com.akash.gkgsmaster.ui.booklet.BookletReaderFragment"
+        android:label="Reader"
+        tools:layout="@layout/fragment_booklet_reader">
+        <argument
+            android:name="booklet"
+            app:argType="com.akash.gkgsmaster.data.model.Booklet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/currentAffairsFragment"
+        android:name="com.akash.gkgsmaster.ui.affairs.CurrentAffairsFragment"
+        android:label="Current Affairs"
+        tools:layout="@layout/fragment_current_affairs" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.akash.gkgsmaster.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_GKArticleListFragment"
+            app:destination="@id/GKArticleListFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_scienceTopicListFragment"
+            app:destination="@id/scienceTopicListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/analyticsFragment"
+        android:name="com.akash.gkgsmaster.ui.analytics.AnalyticsFragment"
+        android:label="Analytics"
+        tools:layout="@layout/fragment_analytics" />
+
+</navigation>
