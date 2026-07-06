@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.akash.gkgsmaster.data.repository.QuestionRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.first
 
 @HiltWorker
 class RefreshDataWorker @AssistedInject constructor(
@@ -17,7 +18,7 @@ class RefreshDataWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            repository.refreshQuestions()
+            repository.getQuestions().first()
             Result.success()
         } catch (e: Exception) {
             Result.retry()

@@ -1,6 +1,8 @@
 package com.akash.gkgsmaster.di
 
-import com.akash.gkgsmaster.data.api.ApiService
+import com.akash.gkgsmaster.data.api.GKApiService
+import com.akash.gkgsmaster.data.api.NewsApiService
+import com.akash.gkgsmaster.data.api.QuizApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,17 +35,34 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideNewsApiService(okHttpClient: OkHttpClient): NewsApiService {
         return Retrofit.Builder()
-            .baseUrl("https://api.example.com/") // Placeholder URL
+            .baseUrl("https://newsapi.org/v2/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
+            .create(NewsApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun provideQuizApiService(okHttpClient: OkHttpClient): QuizApiService {
+        return Retrofit.Builder()
+            .baseUrl("https://opentdb.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(QuizApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGKApiService(okHttpClient: OkHttpClient): GKApiService {
+        return Retrofit.Builder()
+            .baseUrl("https://restcountries.com/v3.1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(GKApiService::class.java)
     }
 }

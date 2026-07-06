@@ -48,15 +48,16 @@ class GKArticleListFragment : Fragment(R.layout.fragment_gk_article_list) {
     private fun setupRecyclerView() {
         adapter = GKArticleAdapter { article ->
             val bundle = Bundle().apply {
-                putParcelable("article", article)
+                putString("topicId", article.id)
             }
-            findNavController().navigate(R.id.action_GKArticleListFragment_to_GKArticleDetailFragment, bundle)
+            findNavController().navigate(R.id.action_GKArticleListFragment_to_learningDetailFragment, bundle)
         }
         binding.rvArticles.adapter = adapter
     }
 
     private fun setupObservers() {
         viewModel.articles.observe(viewLifecycleOwner) { resource ->
+            println("GKArticleList: Observed ${resource.javaClass.simpleName}")
             when (resource) {
                 is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Resource.Success -> {

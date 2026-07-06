@@ -1,24 +1,27 @@
 package com.akash.gkgsmaster.data.repository
 
 import com.akash.gkgsmaster.R
+import com.akash.gkgsmaster.data.PreferenceManager
+import com.akash.gkgsmaster.data.database.RecentActivityDao
 import com.akash.gkgsmaster.data.model.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HomeRepository @Inject constructor() {
+class HomeRepository @Inject constructor(
+    private val recentActivityDao: RecentActivityDao,
+    private val preferenceManager: PreferenceManager
+) {
 
     fun getDailyQuote(): Flow<String> = flow {
-        emit("Success is not final, failure is not fatal: it is the courage to continue that counts.")
-    }
-
-    fun getCurrentAffairs(): Flow<List<CurrentAffair>> = flow {
-        emit(listOf(
-            CurrentAffair("1", "New space mission launched by ISRO", "24 May 2024"),
-            CurrentAffair("2", "Global Climate Summit 2024 updates", "23 May 2024")
-        ))
+        val quotes = listOf(
+            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+            "The only way to do great work is to love what you do.",
+            "Believe you can and you're halfway there.",
+            "Education is the most powerful weapon which you can use to change the world."
+        )
+        emit(quotes.random())
     }
 
     fun getCategories(): Flow<List<HomeCategory>> = flow {
@@ -31,14 +34,34 @@ class HomeRepository @Inject constructor() {
         ))
     }
 
-    fun getUserProgress(): Flow<UserProgress> = flow {
-        emit(UserProgress(level = 12, xp = 2450, nextLevelXp = 3000, dailyStreak = 7))
+    fun getUserProgress(): Flow<UserProgress> {
+        return combine(
+            preferenceManager.totalXp,
+            preferenceManager.streakCount
+        ) { xp, streak ->
+            val level = (xp / 1000) + 1
+            val nextLevelXp = level * 1000
+            UserProgress(level = level, xp = xp, nextLevelXp = nextLevelXp, dailyStreak = streak)
+        }
     }
 
-    fun getRecentActivity(): Flow<List<RecentActivity>> = flow {
-        emit(listOf(
-            RecentActivity("1", "Polity Quiz", "2 hours ago", "8/10"),
-            RecentActivity("2", "History Notes", "5 hours ago")
-        ))
+    fun getRecentActivity(): Flow<List<RecentActivity>> {
+        return recentActivityDao.getRecentActivities().map { list ->
+            list.map { entity ->
+                RecentActivity(
+                    id = entity.id.toString(),
+                    title = entity.title,
+                    timestamp = "Just now",
+                    score = if (entity.type == "QUIZ") entity.description else null
+                )
+            }
+        }
+    }
+
+    suspend fun addActivity(title: String, description: String, type: String) {
+        println("Adding activity: $title ($type)")
+        recentActivityDao.insertActivity(
+            RecentActivityEntity(title = title, description = description, type = type)
+        )
     }
 }

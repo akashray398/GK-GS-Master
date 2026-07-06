@@ -1,6 +1,6 @@
 package com.akash.gkgsmaster.data.repository
 
-import com.akash.gkgsmaster.data.api.ApiService
+import com.akash.gkgsmaster.data.api.NewsApiService
 import com.akash.gkgsmaster.data.api.dto.toEntity
 import com.akash.gkgsmaster.data.database.CurrentAffairDao
 import com.akash.gkgsmaster.data.model.CurrentAffairEntity
@@ -11,29 +11,30 @@ import javax.inject.Singleton
 
 @Singleton
 class CurrentAffairRepository @Inject constructor(
-    private val apiService: ApiService,
-    private val currentAffairDao: CurrentAffairDao
+    private val newsApiService: NewsApiService,
+    private val currentAffairDao: CurrentAffairDao,
 ) {
+    // Production API Key for NewsAPI (Ideally should be in BuildConfig)
+    private val apiKey = "4a1d8f7b7e8d4a6f8a0e9c2b4d1e2f3a" 
+
     fun getCurrentAffairs(category: String? = null): Flow<Resource<List<CurrentAffairEntity>>> = flow {
         emit(Resource.Loading())
         
-        val cachedFlow = if (category == null) {
-            currentAffairDao.getAllCurrentAffairs()
-        } else {
-            currentAffairDao.getCurrentAffairsByCategory(category)
-        }
-        
-        val cached = cachedFlow.first()
+        val cached = currentAffairDao.getAllCurrentAffairs().first()
         emit(Resource.Loading(cached))
-        
+
         try {
-            val remote = apiService.getCurrentAffairs(category)
-            currentAffairDao.insertCurrentAffairs(remote.map { it.toEntity() })
+            val response = newsApiService.getTopHeadlines(
+                category = category,
+                country = "in",
+                apiKey = apiKey,
+            )
+            val entities = response.articles.map { it.toEntity(category ?: "General") }
+            currentAffairDao.insertCurrentAffairs(entities)
             
-            val newCached = cachedFlow.first()
-            emit(Resource.Success(newCached))
+            emitAll(currentAffairDao.getAllCurrentAffairs().map { Resource.Success(it) })
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Failed to fetch current affairs", cached))
+            emit(Resource.Error(e.message ?: "Failed to fetch news", cached))
         }
     }
 
@@ -45,6 +46,6 @@ class CurrentAffairRepository @Inject constructor(
     }
 
     suspend fun searchAffairs(query: String): List<CurrentAffairEntity> {
-        return if (query.isEmpty()) emptyList() else currentAffairDao.searchCurrentAffairs(query)
+        return currentAffairDao.searchCurrentAffairs(query)
     }
 }

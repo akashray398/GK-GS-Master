@@ -39,6 +39,7 @@ class BookletListFragment : Fragment(R.layout.fragment_booklet_list) {
 
     private fun setupObservers() {
         viewModel.booklets.observe(viewLifecycleOwner) { resource ->
+            println("BookletList: Observed ${resource.javaClass.simpleName}")
             when (resource) {
                 is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Resource.Success -> {

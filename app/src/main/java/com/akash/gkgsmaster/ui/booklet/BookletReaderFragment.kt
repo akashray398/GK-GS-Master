@@ -35,12 +35,14 @@ class BookletReaderFragment : Fragment(R.layout.fragment_booklet_reader) {
             arguments?.getParcelable("booklet")
         }
 
+        println("BookletReader: booklet=${booklet?.title}")
         booklet?.let { setupUI(it) }
         
         binding.btnBack.setOnClickListener { findNavController().navigateUp() }
     }
 
     private fun setupUI(booklet: Booklet) {
+        println("Reading booklet: ${booklet.title}")
         binding.tvBookletTitle.text = booklet.title
         
         adapter = BookletPageAdapter()
@@ -56,6 +58,9 @@ class BookletReaderFragment : Fragment(R.layout.fragment_booklet_reader) {
             override fun onPageSelected(position: Int) {
                 binding.tvPageIndicator.text = getString(R.string.page_indicator_placeholder, position + 1, allPages.size)
                 binding.seekBarProgress.progress = position
+                
+                // Save Progress
+                viewModel.saveProgress(booklet.id, position + 1)
             }
         })
         

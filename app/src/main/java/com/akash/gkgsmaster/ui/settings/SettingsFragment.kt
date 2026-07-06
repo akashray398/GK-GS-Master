@@ -26,14 +26,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
         findPreference<SwitchPreferenceCompat>("dark_mode")?.setOnPreferenceChangeListener { _, newValue ->
             val isDark = newValue as Boolean
             AppCompatDelegate.setDefaultNightMode(
-                if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO,
             )
             true
         }
 
         // Language
         findPreference<ListPreference>("language")?.setOnPreferenceChangeListener { _, newValue ->
-            Toast.makeText(requireContext(), "Language changed to $newValue. Restart app to apply.", Toast.LENGTH_SHORT).show()
+            val langCode = newValue as String
+            Toast.makeText(requireContext(), "Language changed to $langCode. Restart app to apply.", Toast.LENGTH_SHORT).show()
             true
         }
 
@@ -81,13 +82,24 @@ class SettingsFragment : PreferenceFragmentCompat() {
             startActivity(Intent.createChooser(emailIntent, "Send Email"))
             true
         }
+
+        findPreference<Preference>("clear_cache")?.setOnPreferenceClickListener {
+            requireContext().cacheDir.deleteRecursively()
+            Toast.makeText(requireContext(), "Cache cleared", Toast.LENGTH_SHORT).show()
+            true
+        }
+
+        findPreference<Preference>("join_community")?.setOnPreferenceClickListener {
+            openUrl("https://t.me/gkgsmaster")
+            true
+        }
     }
 
     private fun openUrl(url: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(requireContext(), "Could not open link", Toast.LENGTH_SHORT).show()
         }
     }

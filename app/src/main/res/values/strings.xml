@@ -28,6 +28,7 @@
 
     <!-- Home -->
     <string name="hello_greeting">Hello,</string>
+    <string name="hello_greeting_format">Hello, %s</string>
     <string name="thought_of_the_day">Thought of the day</string>
     <string name="level_placeholder">Level %d</string>
     <string name="xp_placeholder">%d / %d XP</string>
@@ -92,6 +93,20 @@
     <string name="topic_mastery">Topic Mastery</string>
     <string name="study_time_distribution">Study Time Distribution (Mins)</string>
 
+    <!-- Home Overhaul -->
+    <string name="quote_of_the_day">Quote of the Day</string>
+    <string name="daily_quiz_challenge">Daily Quiz Challenge</string>
+    <string name="test_your_knowledge">Test your knowledge today</string>
+    <string name="explore_gk">Explore GK</string>
+    <string name="recent_notes">Recent Notes</string>
+    <string name="todays_news">Today\'s News</string>
+    <string name="total_xp_label">Total XP</string>
+    <string name="total_xp_format">%1$d XP</string>
+    <string name="streak_count_format">%1$d Days</string>
+    <string name="start_label">Start</string>
+    <string name="word_of_the_day_title">Word of the Day</string>
+    <string name="question_count_format">Question %1$d/%2$d</string>
+
     <!-- Settings -->
     <string name="pref_header_general">General</string>
     <string name="pref_title_dark_mode">Dark Mode</string>
@@ -113,4 +128,24 @@
     <string name="pref_title_rate">Rate App</string>
     <string name="pref_title_share">Share App</string>
     <string name="pref_title_contact">Contact Us</string>
+
+    <!-- API Keys -->
+    <string name="news_api_key">YOUR_NEWS_API_KEY_HERE</string>
+    <string name="why_correct_format">Why Correct: %s</string>
+    <string name="others_format">Others: %s</string>
+    <string name="upsc_tip_format">UPSC Tip: %s</string>
+    <string name="subject_format">Subject: %s</string>
+    <string name="edition_format">Edition: %s</string>
+    <string name="pdf_selected_format">PDF Selected: %s</string>
+    <string name="msg_pdf_selected">PDF Selected</string>
+    <string name="error_required_fields">Title and Author are required</string>
+    <string name="msg_booklet_created">Booklet Created Successfully</string>
+
+    <!-- Quiz Setup -->
+    <string name="select_questions">Select Questions</string>
+    <string name="ten_questions">10 Questions</string>
+    <string name="fifteen_questions">15 Questions</string>
+    <string name="twenty_questions">20 Questions</string>
+    <string name="select_timer">Select Timer</string>
+    <string name="seconds_format">%d Seconds</string>
 </resources>

@@ -11,9 +11,14 @@ import com.akash.gkgsmaster.data.model.*
         CurrentAffairEntity::class,
         Booklet::class,
         NoteEntity::class,
-        BookmarkEntity::class
+        BookmarkEntity::class,
+        LearningTopicEntity::class,
+        RecentActivityEntity::class,
+        AdminUser::class,
+        AdminActivity::class,
+        QuizHistory::class
     ],
-    version = 3,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -23,4 +28,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun bookletDao(): BookletDao
     abstract fun noteDao(): NoteDao
     abstract fun bookmarkDao(): BookmarkDao
+    abstract fun learningTopicDao(): LearningTopicDao
+    abstract fun recentActivityDao(): RecentActivityDao
+    abstract fun adminDao(): AdminDao
+    abstract fun quizHistoryDao(): QuizHistoryDao
 }

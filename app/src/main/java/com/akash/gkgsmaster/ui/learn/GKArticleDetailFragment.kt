@@ -29,18 +29,23 @@ class GKArticleDetailFragment : Fragment(R.layout.fragment_gk_article_detail) {
             arguments?.getParcelable("article")
         }
 
+        println("GKArticleDetail: article=${article?.title}")
         article?.let { setupUI(it) }
 
         binding.btnBack.setOnClickListener { findNavController().navigateUp() }
     }
 
     private fun setupUI(article: GKArticle) {
+        println("Displaying article: ${article.title}")
         binding.tvTitle.text = article.title
         binding.tvContent.text = article.content
-        binding.tvCategory.text = article.category
-
-        binding.btnFavorite.setOnClickListener {
-            Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
+        binding.tvCategory.text = article.category.uppercase()
+        
+        article.highlights?.let {
+            binding.tvHighlights.visibility = View.VISIBLE
+            binding.tvHighlights.text = it
+        } ?: run {
+            binding.tvHighlights.visibility = View.GONE
         }
 
         binding.btnBookmark.setOnClickListener {

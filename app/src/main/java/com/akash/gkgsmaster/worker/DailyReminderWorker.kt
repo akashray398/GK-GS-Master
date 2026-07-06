@@ -8,10 +8,11 @@ import kotlin.random.Random
 
 class DailyReminderWorker(
     context: Context,
-    params: WorkerParameters
+    params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        println("DailyReminderWorker: Triggered")
         val notificationHelper = NotificationHelper(applicationContext)
         
         val reminders = listOf(

@@ -28,6 +28,7 @@ class QuizResultFragment : Fragment(R.layout.fragment_quiz_result) {
             @Suppress("DEPRECATION")
             arguments?.getParcelable("result")
         }
+        println("QuizResultFragment: score=${result?.correctAnswers}")
         result?.let { displayResult(it) }
 
         setupListeners()
@@ -44,6 +45,9 @@ class QuizResultFragment : Fragment(R.layout.fragment_quiz_result) {
             (result.correctAnswers.toFloat() / result.totalQuestions * 100).toInt()
         } else 0
         binding.tvAccuracy.text = getString(R.string.accuracy_placeholder, accuracy)
+        
+        binding.tvXpEarned.text = getString(R.string.total_xp_format, result.xpEarned)
+        binding.tvCoinsEarned.text = result.coinsEarned.toString()
     }
 
     private fun setupListeners() {
@@ -51,6 +55,10 @@ class QuizResultFragment : Fragment(R.layout.fragment_quiz_result) {
             findNavController().navigateUp()
         }
         
+        binding.btnReview.setOnClickListener {
+            findNavController().navigate(R.id.action_quizResultFragment_to_quizReviewFragment)
+        }
+
         binding.btnHome.setOnClickListener {
             findNavController().navigate(R.id.homeFragment)
         }

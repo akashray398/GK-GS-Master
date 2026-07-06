@@ -28,6 +28,11 @@
     <PreferenceCategory app:title="@string/pref_header_data">
 
         <Preference
+            app:key="clear_cache"
+            app:title="Clear Cache"
+            app:summary="Free up local storage" />
+
+        <Preference
             app:key="backup"
             app:title="@string/pref_title_backup"
             app:summary="@string/pref_summary_backup" />
@@ -40,6 +45,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_header_about">
+
+        <Preference
+            app:key="join_community"
+            app:title="Join Community"
+            app:summary="Join our Telegram for updates" />
 
         <Preference
             app:key="privacy_policy"
@@ -60,6 +70,11 @@
         <Preference
             app:key="contact_us"
             app:title="@string/pref_title_contact" />
+
+        <Preference
+            app:key="version"
+            app:title="App Version"
+            app:summary="1.0.0" />
 
     </PreferenceCategory>
 

@@ -23,9 +23,18 @@ class CategoryAdapter(private val onItemClick: (HomeCategory) -> Unit) : ListAda
 
     class ViewHolder(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeCategory) {
+            val context = binding.root.context
             binding.tvTitle.text = item.title
             binding.ivIcon.setImageResource(item.iconRes)
-            binding.ivIcon.setColorFilter(binding.root.context.getColor(item.colorRes))
+            
+            val color = context.getColor(item.colorRes)
+            binding.ivIcon.setColorFilter(color)
+            
+            // Add a subtle background glow
+            val alphaColor = androidx.core.graphics.ColorUtils.setAlphaComponent(color, 40)
+            binding.cardCategory.setCardBackgroundColor(alphaColor)
+            binding.cardCategory.strokeColor = color
+            binding.cardCategory.strokeWidth = 2
         }
     }
 

@@ -10,7 +10,9 @@ import com.akash.gkgsmaster.R
 import com.akash.gkgsmaster.data.model.CurrentAffairEntity
 import com.akash.gkgsmaster.databinding.ItemCurrentAffairBinding
 
-class CurrentAffairsAdapter : ListAdapter<CurrentAffairEntity, CurrentAffairsAdapter.ViewHolder>(DiffCallback()) {
+class CurrentAffairsAdapter(
+    private val onItemClick: (CurrentAffairEntity) -> Unit
+) : ListAdapter<CurrentAffairEntity, CurrentAffairsAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemCurrentAffairBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -18,7 +20,9 @@ class CurrentAffairsAdapter : ListAdapter<CurrentAffairEntity, CurrentAffairsAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        holder.bind(item)
+        holder.itemView.setOnClickListener { onItemClick(item) }
     }
 
     class ViewHolder(private val binding: ItemCurrentAffairBinding) : RecyclerView.ViewHolder(binding.root) {

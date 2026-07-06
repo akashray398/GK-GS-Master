@@ -47,7 +47,16 @@
         <argument
             android:name="result"
             app:argType="com.akash.gkgsmaster.data.model.QuizResult" />
+        <action
+            android:id="@+id/action_quizResultFragment_to_quizReviewFragment"
+            app:destination="@id/quizReviewFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/quizReviewFragment"
+        android:name="com.akash.gkgsmaster.ui.quiz.QuizReviewFragment"
+        android:label="Review Answers"
+        tools:layout="@layout/fragment_quiz_review" />
 
     <fragment
         android:id="@+id/learnFragment"
@@ -57,6 +66,19 @@
         <action
             android:id="@+id/action_learnFragment_to_GKArticleListFragment"
             app:destination="@id/GKArticleListFragment" />
+        <action
+            android:id="@+id/action_learnFragment_to_bookDetailFragment"
+            app:destination="@id/bookDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="com.akash.gkgsmaster.ui.learn.BookDetailFragment"
+        android:label="Book Detail"
+        tools:layout="@layout/fragment_book_detail">
+        <argument
+            android:name="booklet"
+            app:argType="com.akash.gkgsmaster.data.model.Booklet" />
     </fragment>
 
     <fragment
@@ -73,6 +95,19 @@
         <action
             android:id="@+id/action_GKArticleListFragment_to_GKArticleDetailFragment"
             app:destination="@id/GKArticleDetailFragment" />
+        <action
+            android:id="@+id/action_GKArticleListFragment_to_learningDetailFragment"
+            app:destination="@id/learningDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/learningDetailFragment"
+        android:name="com.akash.gkgsmaster.ui.learn.LearningDetailFragment"
+        android:label="Topic Detail"
+        tools:layout="@layout/fragment_learning_detail">
+        <argument
+            android:name="topicId"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -89,7 +124,22 @@
         android:id="@+id/notesFragment"
         android:name="com.akash.gkgsmaster.ui.notes.NotesFragment"
         android:label="@string/notes"
-        tools:layout="@layout/fragment_placeholder" />
+        tools:layout="@layout/fragment_notes">
+        <action
+            android:id="@+id/action_notesFragment_to_noteDetailFragment"
+            app:destination="@id/noteDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteDetailFragment"
+        android:name="com.akash.gkgsmaster.ui.notes.NoteDetailFragment"
+        android:label="Note"
+        tools:layout="@layout/fragment_note_detail">
+        <argument
+            android:name="noteId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
@@ -183,5 +233,62 @@
         android:name="com.akash.gkgsmaster.ui.analytics.AnalyticsFragment"
         android:label="Analytics"
         tools:layout="@layout/fragment_analytics" />
+
+    <fragment
+        android:id="@+id/adminLoginFragment"
+        android:name="com.akash.gkgsmaster.ui.admin.AdminLoginFragment"
+        android:label="Admin Login"
+        tools:layout="@layout/fragment_admin_login">
+        <action
+            android:id="@+id/action_adminLoginFragment_to_adminDashboardFragment"
+            app:destination="@id/adminDashboardFragment"
+            app:popUpTo="@id/adminLoginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminDashboardFragment"
+        android:name="com.akash.gkgsmaster.ui.admin.AdminDashboardFragment"
+        android:label="Admin Dashboard"
+        tools:layout="@layout/fragment_admin_dashboard">
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_adminBookletFragment"
+            app:destination="@id/adminBookletFragment" />
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_adminQuizFragment"
+            app:destination="@id/adminQuizFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminBookletFragment"
+        android:name="com.akash.gkgsmaster.ui.admin.AdminBookletFragment"
+        android:label="Manage Booklets"
+        tools:layout="@layout/fragment_admin_booklet">
+        <action
+            android:id="@+id/action_adminBookletFragment_to_adminAddBookletFragment"
+            app:destination="@id/adminAddBookletFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminAddBookletFragment"
+        android:name="com.akash.gkgsmaster.ui.admin.AdminAddBookletFragment"
+        android:label="Add Booklet"
+        tools:layout="@layout/fragment_admin_add_booklet" />
+
+    <fragment
+        android:id="@+id/adminQuizFragment"
+        android:name="com.akash.gkgsmaster.ui.admin.AdminQuizFragment"
+        android:label="Manage Quiz"
+        tools:layout="@layout/fragment_admin_quiz">
+        <action
+            android:id="@+id/action_adminQuizFragment_to_adminAddQuestionFragment"
+            app:destination="@id/adminAddQuestionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminAddQuestionFragment"
+        android:name="com.akash.gkgsmaster.ui.admin.AdminAddQuestionFragment"
+        android:label="Add Question"
+        tools:layout="@layout/fragment_admin_add_question" />
 
 </navigation>

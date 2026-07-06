@@ -18,7 +18,8 @@ data class RecentActivity(
     val id: String,
     val title: String,
     val timestamp: String,
-    val score: String? = null
+    val score: String? = null,
+    val type: String = "GENERAL"
 )
 
 data class UserProgress(

@@ -30,12 +30,37 @@ class BookletViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getBooklets()
                 .onStart { _booklets.value = Resource.Loading() }
-                .catch { _booklets.value = Resource.Error(it.message ?: "Error") }
-                .collect { _booklets.value = Resource.Success(it) }
+                .collect { list ->
+                    // Auto-populate with new books if they are missing
+                    val initialList = com.akash.gkgsmaster.data.model.BookletDataGenerator.getInitialBooklets()
+                    val missing = initialList.filter { initial -> list.none { it.id == initial.id } }
+                    
+                    if (missing.isNotEmpty()) {
+                        println("BookletViewModel: Found ${missing.size} missing booklets, populating...")
+                        missing.forEach { repository.insertBooklet(it) }
+                    } else {
+                        _booklets.value = Resource.Success(list)
+                    }
+                }
         }
     }
 
     fun updatePage(page: Int) {
+        println("Updating page to $page")
         _currentPage.value = page
+    }
+
+    fun saveProgress(bookletId: String, pageNumber: Int) {
+        viewModelScope.launch {
+            repository.saveProgress(bookletId, pageNumber)
+        }
+    }
+
+    fun insertBooklet(booklet: Booklet) {
+        viewModelScope.launch {
+            repository.insertBooklet(booklet)
+            println("Inserted booklet: ${booklet.title}")
+            loadBooklets() // Refresh list
+        }
     }
 }

@@ -8,26 +8,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.akash.gkgsmaster.data.model.Achievement
 import com.akash.gkgsmaster.databinding.ItemAchievementBinding
 
-class AchievementAdapter : ListAdapter<Achievement, AchievementAdapter.ViewHolder>(DiffCallback()) {
+class AchievementAdapter : ListAdapter<Achievement, AchievementAdapter.AchievementViewHolder>(AchievementDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AchievementViewHolder {
         val binding = ItemAchievementBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return AchievementViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: ItemAchievementBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Achievement) {
-            binding.tvAchievementTitle.text = item.title
-            binding.ivAchievementIcon.setImageResource(item.iconRes)
-            binding.ivAchievementIcon.alpha = if (item.isUnlocked) 1.0f else 0.4f
+    class AchievementViewHolder(private val binding: ItemAchievementBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(achievement: Achievement) {
+            binding.tvAchievementName.text = achievement.title
+            binding.ivAchievementIcon.setImageResource(achievement.iconRes)
+            binding.root.alpha = if (achievement.isUnlocked) 1.0f else 0.5f
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Achievement>() {
+    class AchievementDiffCallback : DiffUtil.ItemCallback<Achievement>() {
         override fun areItemsTheSame(oldItem: Achievement, newItem: Achievement) = oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: Achievement, newItem: Achievement) = oldItem == newItem
     }

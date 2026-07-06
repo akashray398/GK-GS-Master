@@ -15,6 +15,9 @@ interface NoteDao {
     @Delete
     suspend fun deleteNote(note: NoteEntity)
 
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun getNoteById(id: String): NoteEntity?
+
     @Query("SELECT * FROM notes WHERE isSynced = 0")
     suspend fun getUnsyncedNotes(): List<NoteEntity>
 }

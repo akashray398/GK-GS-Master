@@ -9,6 +9,9 @@ data class GKArticle(
     val title: String,
     val content: String,
     val category: String,
+    val highlights: String? = null,
+    val importantFacts: List<String> = emptyList(),
+    val bulletPoints: List<String> = emptyList(),
     val isFavorite: Boolean = false,
     val isBookmarked: Boolean = false,
     val imageUrl: String? = null

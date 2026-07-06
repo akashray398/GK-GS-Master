@@ -6,10 +6,13 @@ data class UserProfile(
     val profileImage: String? = null,
     val totalQuizScore: Int,
     val xp: Int,
+    val coins: Int = 0,
     val bookmarksCount: Int,
     val notesCount: Int,
+    val bookletsRead: Int = 0,
     val studyHours: Float,
     val dailyStreak: Int,
+    val longestStreak: Int = 0,
     val achievements: List<Achievement>
 )
 

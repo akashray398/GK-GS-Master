@@ -3,6 +3,7 @@ package com.akash.gkgsmaster.ui.learn
 import androidx.lifecycle.*
 import com.akash.gkgsmaster.data.model.GKArticle
 import com.akash.gkgsmaster.data.model.GKCategory
+import com.akash.gkgsmaster.data.model.LearningTopicEntity
 import com.akash.gkgsmaster.data.repository.GKRepository
 import com.akash.gkgsmaster.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,9 @@ class GKViewModel @Inject constructor(
     val articles: LiveData<Resource<List<GKArticle>>> = _articles
 
     private val allArticles = mutableListOf<GKArticle>()
+
+    private val _currentTopic = MutableLiveData<LearningTopicEntity?>()
+    val currentTopic: LiveData<LearningTopicEntity?> = _currentTopic
 
     init {
         loadCategories()
@@ -49,11 +53,13 @@ class GKViewModel @Inject constructor(
         } else {
             allCategories.filter { it.name.contains(query, ignoreCase = true) }
         }
+        println("Found ${filtered.size} categories for query: $query")
         _categories.value = Resource.Success(filtered)
     }
 
     fun loadArticles(categoryId: String) {
         viewModelScope.launch {
+            println("Loading articles for $categoryId")
             repository.getArticles(categoryId)
                 .onStart { _articles.value = Resource.Loading() }
                 .catch { _articles.value = Resource.Error(it.message ?: "Error loading articles") }
@@ -72,5 +78,24 @@ class GKViewModel @Inject constructor(
             allArticles.filter { it.title.contains(query, ignoreCase = true) }
         }
         _articles.value = Resource.Success(filtered)
+    }
+
+    fun loadTopicById(id: String) {
+        viewModelScope.launch {
+            val topic = repository.getTopicById(id)
+            _currentTopic.value = topic
+            println("Loaded topic: ${topic?.title}")
+        }
+    }
+
+    fun toggleBookmark(id: String, isBookmarked: Boolean) {
+        viewModelScope.launch {
+            repository.toggleTopicBookmark(id, isBookmarked)
+            println("GKViewModel: Toggled bookmark for $id to $isBookmarked")
+            val topic = _currentTopic.value
+            if (topic?.id == id) {
+                _currentTopic.value = topic.copy(isBookmarked = isBookmarked)
+            }
+        }
     }
 }

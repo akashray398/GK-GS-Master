@@ -9,6 +9,7 @@ import com.akash.gkgsmaster.data.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +19,8 @@ class SearchViewModel @Inject constructor(
     private val scienceRepository: ScienceRepository,
     private val bookletRepository: BookletRepository,
     private val currentAffairRepository: CurrentAffairRepository,
-    private val questionRepository: QuestionRepository
+    private val questionRepository: QuestionRepository,
+    private val noteRepository: NoteRepository
 ) : ViewModel() {
 
     private val _searchResults = MutableLiveData<List<SearchResult>>()
@@ -58,9 +60,28 @@ class SearchViewModel @Inject constructor(
                 results.add(SearchResult.CurrentAffairResult(it.id, it.title, it.date))
             }
             
+            // Articles Search
+            gkRepository.searchTopics(query).forEach {
+                results.add(SearchResult.GKArticleResult(it.id, it.title, it.category))
+            }
+
+            // Booklets Search
+            bookletRepository.getBooklets().first().filter {
+                it.title.contains(query, true) || it.author.contains(query, true)
+            }.forEach {
+                results.add(SearchResult.BookletResult(it.id, it.title, it.author))
+            }
+            
             // Questions Search
             questionRepository.searchQuestions(query).forEach {
                 results.add(SearchResult.QuestionResult(it.id, it.text, it.category))
+            }
+
+            // Notes Search
+            noteRepository.getAllNotes().first().filter { 
+                it.title.contains(query, true) || it.content.contains(query, true)
+            }.forEach {
+                results.add(SearchResult.NoteResult(it.id, it.title))
             }
             
             _searchResults.value = results

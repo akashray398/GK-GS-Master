@@ -1,58 +1,49 @@
 package com.akash.gkgsmaster.ui.analytics
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.akash.gkgsmaster.data.model.*
+import androidx.lifecycle.asLiveData
+import com.akash.gkgsmaster.data.database.QuizHistoryDao
+import com.akash.gkgsmaster.data.model.AnalyticsData
+import com.akash.gkgsmaster.data.model.ProgressEntry
+import com.akash.gkgsmaster.data.model.StudyTimeEntry
+import com.akash.gkgsmaster.data.model.TopicPerformance
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class AnalyticsViewModel @Inject constructor() : ViewModel() {
+class AnalyticsViewModel @Inject constructor(
+    private val quizHistoryDao: QuizHistoryDao
+) : ViewModel() {
 
-    private val _analyticsData = MutableLiveData<AnalyticsData>()
-    val analyticsData: LiveData<AnalyticsData> = _analyticsData
+    val analyticsData: LiveData<AnalyticsData> = quizHistoryDao.getAllQuizHistory().map { history ->
+        val sdf = SimpleDateFormat("EEE", Locale.getDefault())
+        val weeklyProgress = history.take(7).map { 
+            ProgressEntry(sdf.format(Date(it.timestamp)), it.score.toFloat())
+        }.reversed()
 
-    init {
-        loadMockData()
-    }
+        val monthlySdf = SimpleDateFormat("MMM", Locale.getDefault())
+        val monthlyProgress = history.groupBy { monthlySdf.format(Date(it.timestamp)) }
+            .map { (month, list) -> ProgressEntry(month, list.sumOf { it.score }.toFloat()) }
 
-    private fun loadMockData() {
-        _analyticsData.value = AnalyticsData(
-            weeklyProgress = listOf(
-                ProgressEntry("Mon", 45f),
-                ProgressEntry("Tue", 60f),
-                ProgressEntry("Wed", 30f),
-                ProgressEntry("Thu", 80f),
-                ProgressEntry("Fri", 50f),
-                ProgressEntry("Sat", 90f),
-                ProgressEntry("Sun", 70f)
-            ),
-            monthlyProgress = listOf(
-                ProgressEntry("Week 1", 300f),
-                ProgressEntry("Week 2", 450f),
-                ProgressEntry("Week 3", 380f),
-                ProgressEntry("Week 4", 520f)
-            ),
-            quizAccuracy = 78.5f,
-            topicPerformance = listOf(
-                TopicPerformance("Polity", 85f),
-                TopicPerformance("History", 70f),
-                TopicPerformance("Geography", 75f),
-                TopicPerformance("Science", 82f),
-                TopicPerformance("Economy", 65f)
-            ),
-            studyTime = listOf(
-                StudyTimeEntry("Mon", 120),
-                StudyTimeEntry("Tue", 150),
-                StudyTimeEntry("Wed", 90),
-                StudyTimeEntry("Thu", 180),
-                StudyTimeEntry("Fri", 130),
-                StudyTimeEntry("Sat", 200),
-                StudyTimeEntry("Sun", 160)
-            ),
-            completedLessons = 124,
-            totalLessons = 250
+        val topicPerformance = history.groupBy { it.category }
+            .map { (category, list) -> 
+                TopicPerformance(category, list.map { it.accuracy }.average().toFloat()) 
+            }
+
+        AnalyticsData(
+            weeklyProgress = weeklyProgress.ifEmpty { listOf(ProgressEntry("None", 0f)) },
+            monthlyProgress = monthlyProgress.ifEmpty { listOf(ProgressEntry("None", 0f)) },
+            quizAccuracy = if (history.isNotEmpty()) history.map { it.accuracy }.average().toFloat() else 0f,
+            topicPerformance = topicPerformance.ifEmpty { listOf(TopicPerformance("None", 0f)) },
+            studyTime = history.take(7).map { 
+                StudyTimeEntry(sdf.format(Date(it.timestamp)), it.timeTakenSeconds / 60) 
+            }.reversed(),
+            completedLessons = history.size,
+            totalLessons = 500 // Target
         )
-    }
+    }.asLiveData()
 }
